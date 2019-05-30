@@ -6,6 +6,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
     <!-- FIREBASE -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script> -->
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
     <!-- Reset CSS -->
@@ -20,6 +21,9 @@
 
     <!-- jQuery library -->
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+
+    <!-- Moment.js -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 </head>
 
 <body>
@@ -29,6 +33,7 @@
                 <div class='col-12'>
                     <div id='header-block' class='jumbotron'>
                         <h1>Train Time</h1>
+                        <h2 id='clock'></h2>
                     </div>
                 </div>
             </div>
@@ -37,7 +42,19 @@
                     <div id='schedule-block' class='card border-secondary mb-12'>
                         <div class='card-header'>Current Train Schedule</div>
                         <div class='card-body text-secondary'>
-                            <div id='schedule'></div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th> Train Name </th>
+                                        <th> Destination </th>
+                                        <th> Frequency (Mins) </th>
+                                        <th> Next Train Arrival </th>
+                                        <th> Remaining Wait (Mins) </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="train-list">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -62,9 +79,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="frequency-input">Train Frequency (Minutes)</label>
-                                    <input class="form-control" id="frequency-input" type="number" min="1" max="500" step="1"></input>
+                                    <input class="form-control" id="frequency-input" type="number" min="1" max="500"
+                                        step="1"></input>
                                 </div>
-                                <button class="btn btn-default" id="add-user" type="submit">Submit</button>
+                                <button class="btn btn-default" id="add-train" type="submit">Submit</button>
                             </form>
 
                         </div>
