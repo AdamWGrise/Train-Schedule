@@ -50,7 +50,43 @@ db.ref().on('child_added', function (cSnapshot) {
 
     console.log(moment().format('hh:mm A') + ', ' + moment(tArrv).format('hh:mm A'))
 
-    // FINISH CALCULATIONS HERE
+    var difference = moment().diff(moment(tArrv) , "minutes");
+    console.log(difference);
+
+    var wait = '';
+    var nextTrain = '';
+    var trains = '';
+    var currentTime = moment().format('hh:mm A');
+
+    var waitCalc = function() {
+        if (difference < 0) {
+            wait = Math.abs(difference);
+            console.log('Still waiting for first train.');
+            nextTrain = tTime;
+            console.log('Wait: ' + wait + ' mins | Next Train: ' + nextTrain);
+        } else {
+            // FIX THIS
+            console.log('Just waiting for the next one.');
+
+
+            console.log('=--=0-=-==- vars -0--00-00-9-=');
+            console.log(currentTime);
+            console.log(tTime);
+            console.log(tFreq);
+
+            trains = Math.floor((currentTime - tTime)/tFreq);
+            console.log('trains: ' + trains);
+            
+
+            wait = difference % tFreq;
+            nextTrain = moment().add(wait, 'm').format('hh:mm A');
+            console.log('Wait: ' + wait + ' mins | Next Train: ' + nextTrain);
+        };
+    };
+
+    waitCalc();
+
+    $("#train-list").append("<tr><td>" + tName +"</td><td>" + tDest + "</td><td>" + tFreq + "</td><td>" + nextTrain + "</td><td>" + wait + "</td></tr>");
 
 }, function (errorObject) {
     console.log("Error: " + errorObject.code);
