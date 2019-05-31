@@ -43,42 +43,25 @@ $('#add-train').click(function () {
 db.ref().on('child_added', function (cSnapshot) {
     var tName = cSnapshot.val().trainName;
     var tDest = cSnapshot.val().destination;
-    var tTime = cSnapshot.val().time;
+    var tTimeX = cSnapshot.val().time;
     var tFreq = cSnapshot.val().frequency;
-    var tArrv = moment(tTime, 'hh:mm A')
-    console.log(tName + ', ' + tDest + ', ' + tTime + ', ' + tFreq + ', ' + tArrv);
+    var tTime = moment(tTimeX, 'hh:mm A');
+    console.log('======== TRAIN DETAILS ========')
+    console.log(tName + ', ' + tDest + ', ' + moment(tTime).format('hh:mm A') + ', ' + tFreq);
 
-    console.log(moment().format('hh:mm A') + ', ' + moment(tArrv).format('hh:mm A'))
-
-    var difference = moment().diff(moment(tArrv) , "minutes");
-    console.log(difference);
-
+    var difference = moment().diff(moment(tTime), "minutes");
     var wait = '';
     var nextTrain = '';
-    var trains = '';
-    var currentTime = moment().format('hh:mm A');
-
+    
     var waitCalc = function() {
         if (difference < 0) {
             wait = Math.abs(difference);
-            console.log('Still waiting for first train.');
-            nextTrain = tTime;
+            nextTrain = moment(tTime).format('hh:mm A');
             console.log('Wait: ' + wait + ' mins | Next Train: ' + nextTrain);
         } else {
-            // FIX THIS
-            console.log('Just waiting for the next one.');
-
-
-            console.log('=--=0-=-==- vars -0--00-00-9-=');
-            console.log(currentTime);
-            console.log(tTime);
-            console.log(tFreq);
-
-            trains = Math.floor((currentTime - tTime)/tFreq);
-            console.log('trains: ' + trains);
-            
-
-            wait = difference % tFreq;
+            sinceLastTrain = difference % tFreq;
+            wait = tFreq - sinceLastTrain;
+            console.log('Last Train (mins): ' + sinceLastTrain + ' | Wait: ' + wait);
             nextTrain = moment().add(wait, 'm').format('hh:mm A');
             console.log('Wait: ' + wait + ' mins | Next Train: ' + nextTrain);
         };
@@ -97,7 +80,7 @@ db.ref().on('child_added', function (cSnapshot) {
 //////////////////////////////////////////
 
 var clock = function () {
-    time = moment().format('hh:mm:ss A');
+    time = moment().format('LTS');
     $('#clock').text(time);
 }
 clockInterval = setInterval(clock, 1000);
